@@ -1,27 +1,33 @@
+
 # Python
 __pycache__/
 *.py[cod]
-venv/
-.venv/
 *.egg-info/
-.pytest_cache/
+.venv/
+venv/
 
-# Secrets and local config
+# Environment variables and secrets
 .env
+.env.*
+!.env.example
 *.pem
 *.key
-kubeconfig*
-.aws/
+kubeconfig
+.kube/
 
-# Editors / OS
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Logs and generated output
-*.log
-locust_report*.html
+# Generated results
 results/*.csv
 results/*.json
-!results/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

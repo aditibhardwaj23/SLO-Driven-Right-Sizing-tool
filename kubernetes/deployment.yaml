@@ -1,0 +1,28 @@
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: techstore
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: techstore
+
+  template:
+    metadata:
+      labels:
+        app: techstore
+
+    spec:
+      containers:
+        - name: techstore
+          image: techstore:v3
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 5000
+              name: http
