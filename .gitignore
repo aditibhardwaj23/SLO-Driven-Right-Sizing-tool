@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# Secrets and local config
+.env
+*.pem
+*.key
+kubeconfig*
+.aws/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs and generated output
+*.log
+locust_report*.html
+results/*.csv
+results/*.json
+!results/.gitkeep

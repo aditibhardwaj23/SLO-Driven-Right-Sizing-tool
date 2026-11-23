@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-app
+  labels:
+    app: sample-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-app
+  template:
+    metadata:
+      labels:
+        app: sample-app
+    spec:
+      containers:
+        - name: sample-app
+          image: sample-app:v1
+          imagePullPolicy: IfNotPresent   # image is loaded into Kind, not pulled
+          ports:
+            - containerPort: 5000
+          env:
+            - name: WORKERS
+              value: "2"
+            - name: THREADS
+              value: "4"
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sample-app-secret
+                  key: secret-key
+                  optional: true          # falls back to the dev key if the Secret is missing
+          # Deliberately generous starting values: this is what the engine will right-size.
+          resources:
+            requests:
+              cpu: "2000m"
+              memory: "2Gi"
+            limits:
+              cpu: "4000m"
+              memory: "4Gi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 10

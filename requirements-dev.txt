@@ -1,0 +1,4 @@
+-r sample-app/requirements.txt
+-r engine/requirements.txt
+locust
+pytest

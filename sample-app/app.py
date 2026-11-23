@@ -1,13 +1,62 @@
 
-from flask import Flask, render_template, jsonify, request, session
+from flask import Flask, render_template, jsonify, request, session, Response, g
+from prometheus_client import (
+    CONTENT_TYPE_LATEST,
+    CollectorRegistry,
+    Counter,
+    Histogram,
+    generate_latest,
+    multiprocess,
+)
 import time
 import os
 import uuid
 
 app = Flask(__name__)
+
+# All replicas must share the same SECRET_KEY (the cart lives in a session cookie).
+# In Kubernetes, set it from a Secret. The fallback is for local development only.
 app.secret_key = os.environ.get(
     "SECRET_KEY", "techstore-development-key"
 )
+
+# ----------------------------------
+# PROMETHEUS METRICS
+# ----------------------------------
+# Used by the optimization engine to compute latency, error rate and
+# request rate (the SLIs). CPU and memory come from the cluster, not here.
+
+REQUEST_COUNT = Counter(
+    "http_requests_total",
+    "Total HTTP requests",
+    ["method", "endpoint", "status"],
+)
+
+REQUEST_LATENCY = Histogram(
+    "http_request_duration_seconds",
+    "HTTP request latency in seconds",
+    ["method", "endpoint"],
+    buckets=(0.005, 0.01, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3, 0.5, 1, 2, 5, 10),
+)
+
+
+@app.before_request
+def start_timer():
+    g.start_time = time.perf_counter()
+
+
+@app.after_request
+def record_metrics(response):
+    # Skip /metrics itself and unmatched routes (avoids label explosion).
+    if request.url_rule is None or request.path == "/metrics":
+        return response
+
+    endpoint = request.url_rule.rule
+    elapsed = time.perf_counter() - getattr(g, "start_time", time.perf_counter())
+
+    REQUEST_COUNT.labels(request.method, endpoint, response.status_code).inc()
+    REQUEST_LATENCY.labels(request.method, endpoint).observe(elapsed)
+    return response
 
 PRODUCTS = [
     {
@@ -294,6 +343,19 @@ def checkout():
     })
 
 
+@app.route("/metrics")
+def metrics():
+    # With several gunicorn workers each process has its own counters, so
+    # they are combined through PROMETHEUS_MULTIPROC_DIR (set in the Dockerfile).
+    if os.environ.get("PROMETHEUS_MULTIPROC_DIR"):
+        registry = CollectorRegistry()
+        multiprocess.MultiProcessCollector(registry)
+        data = generate_latest(registry)
+    else:
+        data = generate_latest()
+    return Response(data, mimetype=CONTENT_TYPE_LATEST)
+
+
 @app.route("/health")
 def health():
     return jsonify({
@@ -340,8 +402,10 @@ def heavy_work():
 
 
 if __name__ == "__main__":
+    # Local development only. In Docker/Kubernetes the app runs under gunicorn.
+    # Set FLASK_DEBUG=1 to turn on debug mode locally.
     app.run(
         host="0.0.0.0",
         port=5000,
-        debug=True
+        debug=os.environ.get("FLASK_DEBUG") == "1"
     )
