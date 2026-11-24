@@ -34,6 +34,11 @@ Locust --> Sample app (Kind/EKS) --> Prometheus --> Python engine --> SLO valida
 | `docs/` | Architecture, algorithm notes, project tracker |
 | `tests/` | Unit tests |
 
+The Kubernetes manifests are in `k8s/`; monitoring setup is in `monitoring/`.
+See [monitoring/README.md](monitoring/README.md) for the local Kind Helm install,
+ServiceMonitor assumptions, and Prometheus queries. The monitoring configuration
+is prepared, but a live Prometheus target and query data still need to be verified.
+
 ## Quick start
 
 ### 1. Run the sample app locally

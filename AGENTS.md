@@ -44,7 +44,7 @@ SLO-Driven-Right-Sizing-tool/
 │   ├── templates/index.html
 │   └── static/style.css, script.js
 ├── k8s/                   kind-config.yaml, deployment.yaml, service.yaml
-├── monitoring/            Prometheus/Grafana config (Helm values, dashboards)
+├── monitoring/            kube-prometheus-stack values, ServiceMonitor, queries, dashboards
 ├── engine/                Python optimization engine
 │   ├── config.py          ALL tunable numbers (margins, SLO targets, floors)
 │   ├── collector.py       Prometheus HTTP API queries
@@ -55,7 +55,7 @@ SLO-Driven-Right-Sizing-tool/
 ├── load-testing/          locustfile.py
 ├── dashboard/             (empty until Phase 9)
 ├── results/               Measured before/after data (CSV/JSON ignored by git)
-├── scripts/               Helper scripts
+├── scripts/               Verification and helper scripts
 └── tests/                 test_engine.py, test_sample_app.py
 ```
 
@@ -132,6 +132,7 @@ locust -f load-testing/locustfile.py --host http://localhost:8080
 
 - Done: concepts and design notes; Flask TechStore app written; folder structure; starter engine
   helpers, Dockerfile, Kind/Kubernetes YAML, starter Locust file.
-- Next: verify the app runs locally and tests pass, build the Docker image, deploy to Kind,
-  install Prometheus and Grafana.
+- Verified locally: 15 pytest tests pass; `scripts/verify-sample-app.sh` passes all 16 checks.
+- Next: build the Docker image, deploy to Kind,
+  install Prometheus and Grafana, and verify the target and example queries.
 - Full phase list: `docs/project-tracker.md`.
