@@ -39,6 +39,12 @@ class Shopper(HttpUser):
 
     @task(1)
     def checkout(self):
+        product_id = random.randint(1, 8)
+        self.client.post(
+            "/api/cart/items",
+            json={"product_id": product_id, "quantity": 1},
+            name="/api/cart/items (checkout setup)",
+        )
         self.client.post("/api/checkout", json={})
 
     @task(1)
