@@ -135,6 +135,9 @@ locust -f load-testing/locustfile.py --host http://localhost:8080
   data only. Local app smoke check passed previously.
 - Not verified: engine against live Prometheus; this needs Docker and a Kind cluster. The
   earlier task brief's Tasks 2–4 (Docker, Kind, and monitoring deployment/validation) remain open.
+- Next: complete Tasks 2â€“4, then implement and test collector queries for CPU throttling,
+  error rate, availability, and OOMKills, plus the request-count, failed-request, and
+  availability inputs needed for full SLO validation. Current test count: 22.
 - `results/` is empty; no measured data exists. Do not treat local smoke or Locust sanity
   checks as baseline results.
 - Full phase list: `docs/project-tracker.md`.
