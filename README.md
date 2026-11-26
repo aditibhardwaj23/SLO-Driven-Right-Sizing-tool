@@ -11,6 +11,14 @@ CPU and memory settings **without breaking performance**.
 
 The tool only *recommends*. It never changes production resources automatically.
 
+## Engine status
+
+The collector, analyzer, optimizer, and SLO validator are implemented and unit-tested
+against mocked data only. They have not been verified against a live Prometheus
+instance. Live verification requires the Docker and Kind setup, which remains open
+along with monitoring deployment (the prior task brief's Tasks 2–4). `results/`
+contains no measured data; local smoke/load checks are not baselines.
+
 > Numbers such as 2000m to 720m in the design notes are illustrative examples,
 > not measured results. Real results go in `results/` once tests are run.
 
