@@ -22,5 +22,6 @@ class EngineConfig:
     margins: Margins = field(default_factory=Margins)
     slo: SLOTargets = field(default_factory=SLOTargets)
     percentile: float = 95.0
+    min_samples: int = 5  # starting heuristic, not measured
     min_cpu_m: int = 50          # never recommend below this
     min_memory_mi: int = 64
