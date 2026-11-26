@@ -44,7 +44,7 @@ SLO-Driven-Right-Sizing-tool/
 │   ├── templates/index.html
 │   └── static/style.css, script.js
 ├── k8s/                   kind-config.yaml, deployment.yaml, service.yaml
-├── monitoring/            kube-prometheus-stack values, ServiceMonitor, queries, dashboards
+├── monitoring/            Prometheus/Grafana config (Helm values, dashboards)
 ├── engine/                Python optimization engine
 │   ├── config.py          ALL tunable numbers (margins, SLO targets, floors)
 │   ├── collector.py       Prometheus HTTP API queries
@@ -55,7 +55,7 @@ SLO-Driven-Right-Sizing-tool/
 ├── load-testing/          locustfile.py
 ├── dashboard/             (empty until Phase 9)
 ├── results/               Measured before/after data (CSV/JSON ignored by git)
-├── scripts/               Verification and helper scripts
+├── scripts/               Helper scripts
 └── tests/                 test_engine.py, test_sample_app.py
 ```
 
@@ -130,14 +130,8 @@ locust -f load-testing/locustfile.py --host http://localhost:8080
 
 ## 8. Current status (update as work progresses)
 
-- Done: concepts and design notes; Flask TechStore app written; folder structure; engine
-  collector, analyzer, optimizer, and SLO validator implemented and unit-tested against MOCK
-  data only. Local app smoke check passed previously.
-- Not verified: engine against live Prometheus; this needs Docker and a Kind cluster. The
-  earlier task brief's Tasks 2–4 (Docker, Kind, and monitoring deployment/validation) remain open.
-- Next: complete Tasks 2â€“4, then implement and test collector queries for CPU throttling,
-  error rate, availability, and OOMKills, plus the request-count, failed-request, and
-  availability inputs needed for full SLO validation. Current test count: 22.
-- `results/` is empty; no measured data exists. Do not treat local smoke or Locust sanity
-  checks as baseline results.
+- Done: concepts and design notes; Flask TechStore app written; folder structure; starter engine
+  helpers, Dockerfile, Kind/Kubernetes YAML, starter Locust file.
+- Next: verify the app runs locally and tests pass, build the Docker image, deploy to Kind,
+  install Prometheus and Grafana.
 - Full phase list: `docs/project-tracker.md`.
