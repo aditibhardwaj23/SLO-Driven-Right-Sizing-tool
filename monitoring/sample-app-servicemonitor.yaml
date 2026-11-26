@@ -1,0 +1,25 @@
+# Tells Prometheus to scrape GET /metrics on the sample-app Service.
+#
+# ASSUMPTIONS TO CHECK against k8s/service.yaml before applying:
+#   1. Service has label  app: sample-app
+#   2. Service port is named  http   (spec.ports[].name)
+#   3. Service lives in namespace  default
+# If any differ, change selector / port / namespaceSelector below to match.
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sample-app
+  namespace: monitoring
+  labels:
+    app: sample-app
+spec:
+  namespaceSelector:
+    matchNames:
+      - default
+  selector:
+    matchLabels:
+      app: sample-app
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
