@@ -130,9 +130,11 @@ locust -f load-testing/locustfile.py --host http://localhost:8080
 
 ## 8. Current status (update as work progresses)
 
-- Done: concepts and design notes; Flask TechStore app written; folder structure; starter engine
-  helpers, Dockerfile, Kind/Kubernetes YAML, starter Locust file.
-- Verified locally: 15 pytest tests pass; `scripts/verify-sample-app.sh` passes all 16 checks.
-- Next: build the Docker image, deploy to Kind,
-  install Prometheus and Grafana, and verify the target and example queries.
+- Done: concepts and design notes; Flask TechStore app written; folder structure; engine
+  collector, analyzer, optimizer, and SLO validator implemented and unit-tested against MOCK
+  data only. Local app smoke check passed previously.
+- Not verified: engine against live Prometheus; this needs Docker and a Kind cluster. The
+  earlier task brief's Tasks 2–4 (Docker, Kind, and monitoring deployment/validation) remain open.
+- `results/` is empty; no measured data exists. Do not treat local smoke or Locust sanity
+  checks as baseline results.
 - Full phase list: `docs/project-tracker.md`.
