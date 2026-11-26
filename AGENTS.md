@@ -131,7 +131,28 @@ locust -f load-testing/locustfile.py --host http://localhost:8080
 ## 8. Current status (update as work progresses)
 
 - Done: concepts and design notes; Flask TechStore app written; folder structure; starter engine
-  helpers, Dockerfile, Kind/Kubernetes YAML, starter Locust file.
-- Next: verify the app runs locally and tests pass, build the Docker image, deploy to Kind,
-  install Prometheus and Grafana.
+  helpers, Dockerfile, Kind/Kubernetes YAML, starter Locust file. The app starts locally and the
+  test suite passes. The smoke script could not be run because Bash/WSL is unavailable.
+- Dockerfile, Kind manifests and monitoring files are written and statically reviewed, but have
+  NOT been run (Docker is unavailable here). Docker build, Kind deployment, Prometheus/Grafana
+  installation and live query checks remain open. Do not mark Phase 3 done yet.
+- On a machine with Docker, Kind, kubectl and Helm, from the repository root run:
+
+  ```bash
+  docker build -t sample-app:v1 ./sample-app
+  kind create cluster --config k8s/kind-config.yaml
+  kind load docker-image sample-app:v1 --name rightsizer
+  kubectl create secret generic sample-app-secret --from-literal=secret-key="$(python -c 'import secrets; print(secrets.token_hex(32))')"
+  kubectl apply -f k8s/
+  helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+  helm repo update
+  helm install monitoring prometheus-community/kube-prometheus-stack \
+    -n monitoring --create-namespace -f monitoring/kube-prometheus-stack-values.yaml
+  kubectl apply -f monitoring/sample-app-servicemonitor.yaml
+  kubectl -n monitoring get svc
+  kubectl -n monitoring port-forward svc/monitoring-kube-prometheus-prometheus 9090:9090
+  ```
+
+- The requested `docs/codex-task-brief-verify-deploy-monitor.md` was not present on the backup
+  branch; commands above are taken from the repo's current Kubernetes and monitoring instructions.
 - Full phase list: `docs/project-tracker.md`.

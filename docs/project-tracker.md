@@ -6,7 +6,7 @@ Status: Not started / In progress / Done
 |---|---|---|---|
 | 1 | Learning and concepts | Kubernetes basics, requests vs limits, Prometheus, VPA, SLOs, Locust | In progress |
 | 2 | Environment setup | Docker, kubectl, Kind, Helm, Python, Git repo | In progress |
-| 3 | Sample app and monitoring | Flask app, Dockerfile, deploy on Kind, Prometheus + Grafana | In progress (Flask app written, not yet verified) |
+| 3 | Sample app and monitoring | Flask app, Dockerfile, deploy on Kind, Prometheus + Grafana | In progress (app starts locally; Dockerfile, Kind manifests and monitoring files written and statically reviewed but NOT run because Docker is unavailable; smoke script could not run because Bash/WSL is unavailable. Docker build, Kind deploy, Prometheus/Grafana install and live query checks remain open) |
 | 4 | Metrics Collector | Query Prometheus for CPU, memory, throttling, latency, errors, OOM | Not started (query helpers only) |
 | 5 | Resource Analyzer | Avg, P95, peaks, variability | Not started (helpers only) |
 | 6 | Optimization Engine | Formulas, margins, spikes, throttling, OOM, separate limits | Not started (basic formulas only) |
