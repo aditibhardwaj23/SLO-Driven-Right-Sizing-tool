@@ -12,6 +12,7 @@ metadata:
   namespace: monitoring
   labels:
     app: sample-app
+    release: monitoring
 spec:
   namespaceSelector:
     matchNames:
