@@ -133,6 +133,9 @@ locust -f load-testing/locustfile.py --host http://localhost:8080
 - Done: concepts and design notes; Flask TechStore app written; folder structure; starter engine
   helpers, Dockerfile, Kind/Kubernetes YAML, starter Locust file. The app starts locally and the
   test suite passes. The smoke script could not be run because Bash/WSL is unavailable.
+- `k8s/` is the only Kubernetes manifests folder. The Deployment, Service and the single
+  `monitoring/sample-app-servicemonitor.yaml` use matching `sample-app` labels and the named
+  `http` port. These relationships have static tests; live cluster behavior is not verified.
 - Dockerfile, Kind manifests and monitoring files are written and statically reviewed, but have
   NOT been run (Docker is unavailable here). Docker build, Kind deployment, Prometheus/Grafana
   installation and live query checks remain open. Do not mark Phase 3 done yet.

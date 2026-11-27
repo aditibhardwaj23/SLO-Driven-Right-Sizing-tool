@@ -69,6 +69,11 @@ kubectl apply -f k8s/
 ```
 App is then at http://localhost:8080.
 
+The `k8s/` directory is the single source for Kubernetes manifests. Its Deployment and Service
+use the `app: sample-app` label, and `monitoring/sample-app-servicemonitor.yaml` selects that
+Service on its named `http` port in the `default` namespace. The monitoring resources are
+configured but have not been verified against a live Kind cluster.
+
 ### 5. Load test
 ```bash
 pip install locust
