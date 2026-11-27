@@ -33,7 +33,9 @@ class TestSampleApp(unittest.TestCase):
 
     def test_metrics_exposed(self):
         self.client.get("/fast")
-        body = self.client.get("/metrics").get_data(as_text=True)
+        response = self.client.get("/metrics")
+        self.assertEqual(response.status_code, 200)
+        body = response.get_data(as_text=True)
         self.assertIn("http_requests_total", body)
         self.assertIn("http_request_duration_seconds", body)
 
